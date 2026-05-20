@@ -45,8 +45,7 @@ class ProductController extends Controller
      */
     public function index(IndexProductRequest $request): JsonResponse
     {
-        $perPage = (int) $request->validated('per_page', 10);
-        $products = $this->productService->getAllProducts($perPage);
+        $products = $this->productService->getAllProducts($request->validated());
         $data = ProductResource::collection($products)->resolve();
 
         $payload = [

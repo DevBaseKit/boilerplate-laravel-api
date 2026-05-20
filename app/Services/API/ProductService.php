@@ -26,9 +26,9 @@ class ProductService implements ProductServiceInterface
     /**
      * Get all products.
      */
-    public function getAllProducts(int $perPage = 10): LengthAwarePaginator
+    public function getAllProducts(array $filters = []): LengthAwarePaginator
     {
-        return $this->productRepository->paginate($perPage);
+        return $this->productRepository->paginate($filters);
     }
 
     /**

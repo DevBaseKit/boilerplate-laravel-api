@@ -12,7 +12,7 @@ interface ProductServiceInterface
      *
      * @return LengthAwarePaginator
      */
-    public function getAllProducts(int $perPage = 10): LengthAwarePaginator;
+    public function getAllProducts(array $filters = []): LengthAwarePaginator;
 
     /**
      * Get product by ID.

@@ -211,16 +211,77 @@ Register policy di `AppServiceProvider`.
 
 ## Endpoint Utama Saat Ini
 
-- `POST /api/v1/register`
-- `POST /api/v1/login`
-- `POST /api/v1/logout`
-- `GET /api/v1/me`
-- `POST /api/v1/refresh`
-- `GET /api/v1/products`
-- `POST /api/v1/products`
-- `GET /api/v1/products/{product}`
-- `PUT/PATCH /api/v1/products/{product}`
-- `DELETE /api/v1/products/{product}`
+### Auth
+
+#### `POST /api/v1/register`
+- Auth: `No`
+- Body params:
+  - `name` (string, required)
+  - `email` (string, required, unique)
+  - `password` (string, required, confirmed)
+
+#### `POST /api/v1/login`
+- Auth: `No`
+- Body params:
+  - `email` (string, required)
+  - `password` (string, required)
+
+#### `POST /api/v1/logout`
+- Auth: `Yes (Bearer Token)`
+- Body params: `-`
+
+#### `GET /api/v1/me`
+- Auth: `Yes (Bearer Token)`
+- Query params: `-`
+
+#### `POST /api/v1/refresh`
+- Auth: `Yes (Bearer Token)`
+- Body params: `-`
+
+### Products
+
+#### `GET /api/v1/products`
+- Auth: `Yes (Bearer Token)`
+- Query params:
+  - `page` (integer, optional, default `1`)
+  - `limit` (integer, optional, default `10`, min `1`, max `100`)
+  - `search` (string, optional) → search by `name` and `description`
+  - `status` (string, optional, reserved for exact filter)
+  - `order_by` (string, optional): `name|price|stock|created_at|updated_at`
+  - `dir` (string, optional): `asc|desc` (default `desc`)
+
+Contoh:
+```http
+GET /api/v1/products?search=iphone&limit=10&page=1&order_by=price&dir=asc
+```
+
+#### `POST /api/v1/products`
+- Auth: `Yes (Bearer Token)` + policy (`admin` / `manager`)
+- Body params:
+  - `name` (string, required, max:255)
+  - `description` (string, optional)
+  - `price` (numeric, required, min:0)
+  - `stock` (integer, required, min:0)
+
+#### `GET /api/v1/products/{product}`
+- Auth: `Yes (Bearer Token)` + policy (owner atau `admin`)
+- Path params:
+  - `product` (integer, required)
+
+#### `PUT/PATCH /api/v1/products/{product}`
+- Auth: `Yes (Bearer Token)` + policy (owner atau `admin`)
+- Path params:
+  - `product` (integer, required)
+- Body params (semua optional, minimal kirim 1 field):
+  - `name` (string, max:255)
+  - `description` (string)
+  - `price` (numeric, min:0)
+  - `stock` (integer, min:0)
+
+#### `DELETE /api/v1/products/{product}`
+- Auth: `Yes (Bearer Token)` + policy (owner atau `admin`)
+- Path params:
+  - `product` (integer, required)
 
 ## Testing & Quality Check
 

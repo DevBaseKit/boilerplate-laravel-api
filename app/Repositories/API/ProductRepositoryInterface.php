@@ -10,7 +10,7 @@ interface ProductRepositoryInterface
     /**
      * Get paginated products.
      */
-    public function paginate(int $perPage = 10): LengthAwarePaginator;
+    public function paginate(array $filters = []): LengthAwarePaginator;
 
     /**
      * Find product by id or fail.

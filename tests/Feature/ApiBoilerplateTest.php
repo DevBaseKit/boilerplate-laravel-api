@@ -304,9 +304,9 @@ class ApiBoilerplateTest extends TestCase
     }
 
     /**
-     * Test products index returns paginated structure and validates per_page.
+     * Test products index returns paginated structure and validates limit.
      */
-    public function test_products_index_returns_pagination_contract_and_validates_per_page(): void
+    public function test_products_index_returns_pagination_contract_and_validates_limit(): void
     {
         $user = User::factory()->create(['role' => 'manager']);
         Product::create([
@@ -331,7 +331,7 @@ class ApiBoilerplateTest extends TestCase
             'stock' => 3,
         ]);
 
-        $response = $this->actingAs($user, 'api')->getJson('/api/v1/products?per_page=2');
+        $response = $this->actingAs($user, 'api')->getJson('/api/v1/products?limit=2');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -351,7 +351,7 @@ class ApiBoilerplateTest extends TestCase
             ])
             ->assertJsonCount(2, 'result.data');
 
-        $invalidResponse = $this->actingAs($user, 'api')->getJson('/api/v1/products?per_page=999');
+        $invalidResponse = $this->actingAs($user, 'api')->getJson('/api/v1/products?limit=999');
 
         $invalidResponse->assertStatus(422)
             ->assertJson([

@@ -2,27 +2,21 @@
 
 namespace App\Http\Requests\API;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class IndexProductRequest extends FormRequest
+class IndexProductRequest extends BaseIndexRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+     * Allowed sortable fields for products index.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<int, string>
      */
-    public function rules(): array
+    protected function allowedSortFields(): array
     {
         return [
-            'per_page' => 'sometimes|integer|min:1|max:100',
+            'name',
+            'price',
+            'stock',
+            'created_at',
+            'updated_at',
         ];
     }
 }

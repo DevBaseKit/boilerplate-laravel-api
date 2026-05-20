@@ -3,16 +3,32 @@
 namespace App\Repositories\API;
 
 use App\Models\Product;
+use App\Repositories\Concerns\AppliesQueryFilters;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductRepository implements ProductRepositoryInterface
 {
+    use AppliesQueryFilters;
+
     /**
      * Get paginated products.
      */
-    public function paginate(int $perPage = 10): LengthAwarePaginator
+    public function paginate(array $filters = []): LengthAwarePaginator
     {
-        return Product::paginate($perPage);
+        $page = (int) ($filters['page'] ?? 1);
+        $limit = (int) ($filters['limit'] ?? 10);
+
+        $query = Product::query();
+
+        $query = $this->applyIndexFilters($query, $filters, [
+            'search_fields' => ['name', 'description'],
+            'exact_filters' => [],
+            'order_by' => 'created_at',
+            'dir' => 'desc',
+        ]);
+
+        return $query
+            ->paginate($limit, ['*'], 'page', $page);
     }
 
     /**

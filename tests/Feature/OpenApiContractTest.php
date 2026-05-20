@@ -44,7 +44,7 @@ class OpenApiContractTest extends TestCase
             'stock' => 1,
         ]);
 
-        $response = $this->actingAs($user, 'api')->getJson('/api/v1/products?per_page=1');
+        $response = $this->actingAs($user, 'api')->getJson('/api/v1/products?limit=1');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
