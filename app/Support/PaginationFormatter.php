@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Support;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class PaginationHelper
+class PaginationFormatter
 {
     /**
      * Build standardized pagination payload.

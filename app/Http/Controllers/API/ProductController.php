@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Helpers\PaginationHelper;
 use App\Constants\ApiMessage;
 use App\Constants\ApiStatusCode;
 use App\Http\Controllers\Controller;
@@ -13,6 +12,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Services\API\ProductServiceInterface;
 use App\Services\AuditTrailService;
+use App\Support\PaginationFormatter;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
 
@@ -48,7 +48,7 @@ class ProductController extends Controller
     {
         $products = $this->productService->getAllProducts($request->validated());
         $data = ProductResource::collection($products)->resolve();
-        $payload = PaginationHelper::format($products, $data);
+        $payload = PaginationFormatter::format($products, $data);
 
         return $this->sendSuccess($payload, ApiMessage::SUCCESS);
     }

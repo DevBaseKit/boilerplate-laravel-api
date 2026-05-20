@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\API;
 
+use App\Http\Requests\Shared\BaseIndexRequest;
+
 class IndexProductRequest extends BaseIndexRequest
 {
     /**
