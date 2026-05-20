@@ -51,34 +51,54 @@ php artisan serve
 
 ## Struktur Folder (Yang Paling Penting)
 
-- `app/Http/Controllers/API`  
-  Controller endpoint API.
-- `app/Http/Requests/API`  
-  Validasi request per endpoint.
-- `app/Http/Resources`  
-  Transformer output response.
-- `app/Services/API`  
-  Business logic.
-- `app/Repositories/API`  
-  Data access layer (query ke model).
-- `app/Policies`  
-  Authorization rule per model.
-- `app/Traits/ApiResponseTrait.php`  
-  Format response sukses/error standar.
-- `app/Constants`  
-  Konstanta message dan status code.
-- `app/Http/Middleware`  
-  Middleware observability (request ID, request logging).
-- `app/Models`  
-  Eloquent model.
-- `database/migrations`  
-  Skema database.
-- `routes/api.php`  
-  Definisi route API.
-- `tests/Feature`  
-  Integration/feature test API.
-- `openapi/openapi.json`  
-  Contract OpenAPI.
+### Visual Structure
+
+```text
+app/
+├── Constants/                  # Konstanta message & status code API
+├── Http/
+│   ├── Controllers/API/        # Controller endpoint API
+│   ├── Middleware/             # Request ID & structured request logging
+│   ├── Requests/API/           # Validasi request per endpoint
+│   └── Resources/              # Transformer output response API
+├── Models/                     # Eloquent models
+├── Policies/                   # Authorization rule (ownership/role)
+├── Repositories/API/           # Data access layer (query model)
+├── Services/API/               # Business logic API
+└── Traits/ApiResponseTrait.php # Format response sukses/error standar
+
+database/
+└── migrations/                 # Skema database
+
+routes/
+└── api.php                     # Definisi route API v1
+
+tests/
+└── Feature/                    # Integration / feature test API
+
+openapi/
+└── openapi.json                # Kontrak API manual
+```
+
+### Why This Structure
+
+| Layer | Tanggung Jawab |
+|---|---|
+| Controller | Terima request, panggil service, kirim response |
+| Request | Validasi input per endpoint |
+| Service | Menjalankan business rules/use-case |
+| Repository | Menangani query & akses data |
+| Resource | Menstandarkan format output API |
+| Policy | Menentukan siapa boleh akses data apa |
+| Middleware | Observability, request tracing, logging |
+| Tests | Menjaga kontrak API agar tidak regress |
+
+### Benefit
+
+- Struktur clean dan mudah dibaca tim baru.
+- Mudah scaling karena pemisahan tanggung jawab jelas.
+- Testable: business logic tidak tercampur di controller.
+- Konsisten untuk endpoint baru: tinggal ikuti flow layer yang sama.
 
 ## Format Response
 
