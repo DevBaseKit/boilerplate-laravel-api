@@ -1,0 +1,227 @@
+# Boilerplate Laravel API
+
+Boilerplate Laravel API yang sudah disiapkan untuk kebutuhan production baseline:
+- JWT authentication
+- API versioning (`/api/v1`)
+- Standard response format
+- Pagination custom payload
+- Policy authorization (ownership + role)
+- Request ID + structured logging + audit trail
+- OpenAPI contract + automated tests
+
+## Requirements
+
+- PHP 8.2+
+- Composer
+- MySQL/PostgreSQL (atau DB lain yang didukung Laravel)
+
+## Quick Start
+
+1. Install dependency
+```bash
+composer install
+```
+
+2. Copy environment
+```bash
+cp .env.example .env
+```
+
+3. Generate app key
+```bash
+php artisan key:generate
+```
+
+4. Set konfigurasi database di `.env`
+
+5. Run migration
+```bash
+php artisan migrate
+```
+
+6. (Opsional) Jalankan test
+```bash
+php artisan test
+```
+
+7. Jalankan server
+```bash
+php artisan serve
+```
+
+## Struktur Folder (Yang Paling Penting)
+
+- `app/Http/Controllers/API`  
+  Controller endpoint API.
+- `app/Http/Requests/API`  
+  Validasi request per endpoint.
+- `app/Http/Resources`  
+  Transformer output response.
+- `app/Services/API`  
+  Business logic.
+- `app/Repositories/API`  
+  Data access layer (query ke model).
+- `app/Policies`  
+  Authorization rule per model.
+- `app/Traits/ApiResponseTrait.php`  
+  Format response sukses/error standar.
+- `app/Constants`  
+  Konstanta message dan status code.
+- `app/Http/Middleware`  
+  Middleware observability (request ID, request logging).
+- `app/Models`  
+  Eloquent model.
+- `database/migrations`  
+  Skema database.
+- `routes/api.php`  
+  Definisi route API.
+- `tests/Feature`  
+  Integration/feature test API.
+- `openapi/openapi.json`  
+  Contract OpenAPI.
+
+## Format Response
+
+Contoh success:
+```json
+{
+  "status": true,
+  "status_code": 200,
+  "message": "Success.",
+  "result": {}
+}
+```
+
+Contoh error:
+```json
+{
+  "status": false,
+  "status_code": 422,
+  "message": "Error validation",
+  "error_items": ["The name field is required."]
+}
+```
+
+## Step-by-Step Membuat Endpoint API Baru
+
+Contoh: bikin endpoint `Category`.
+
+1. Buat Model + Migration
+```bash
+php artisan make:model Category -m
+```
+Isi migration, lalu:
+```bash
+php artisan migrate
+```
+
+2. Buat Request Validation
+```bash
+php artisan make:request API/StoreCategoryRequest
+php artisan make:request API/UpdateCategoryRequest
+php artisan make:request API/IndexCategoryRequest
+```
+
+3. Buat Resource Transformer
+```bash
+php artisan make:resource CategoryResource
+```
+
+4. Buat Repository Interface + Repository
+- `app/Repositories/API/CategoryRepositoryInterface.php`
+- `app/Repositories/API/CategoryRepository.php`
+
+Minimal method:
+- `paginate(int $perPage = 10)`
+- `findOrFail(mixed $id)`
+- `create(array $data)`
+- `updateModel(Category $category, array $data)`
+- `deleteModel(Category $category)`
+
+5. Buat Service Interface + Service
+- `app/Services/API/CategoryServiceInterface.php`
+- `app/Services/API/CategoryService.php`
+
+Isi business logic, panggil repository di sini.
+
+6. Daftarkan binding di Service Provider
+- `app/Providers/AppServiceProvider.php`
+
+Tambahkan:
+- `CategoryRepositoryInterface -> CategoryRepository`
+- `CategoryServiceInterface -> CategoryService`
+
+7. Buat Controller API
+```bash
+php artisan make:controller API/CategoryController --api
+```
+Di controller:
+- Validasi lewat FormRequest
+- Gunakan Service
+- Return via `sendSuccess()` / `sendError()`
+- Gunakan `CategoryResource`
+
+8. Tambah Route
+- `routes/api.php`
+- Masukkan dalam group `prefix('v1')`
+- Gunakan middleware yang sesuai (`auth:api`, throttle, dll)
+
+Contoh:
+```php
+Route::middleware('auth:api')->group(function () {
+    Route::apiResource('categories', CategoryController::class);
+});
+```
+
+9. Tambah Policy (Jika Butuh Ownership/Role)
+```bash
+php artisan make:policy CategoryPolicy --model=Category
+```
+Register policy di `AppServiceProvider`.
+
+10. Tambah Test Feature
+- Test success case
+- Test validation
+- Test unauthorized/forbidden
+- Test pagination contract
+
+11. Update OpenAPI Contract
+- Tambah path baru di `openapi/openapi.json`
+- Pastikan response shape sesuai implementasi.
+
+## Endpoint Utama Saat Ini
+
+- `POST /api/v1/register`
+- `POST /api/v1/login`
+- `POST /api/v1/logout`
+- `GET /api/v1/me`
+- `POST /api/v1/refresh`
+- `GET /api/v1/products`
+- `POST /api/v1/products`
+- `GET /api/v1/products/{product}`
+- `PUT/PATCH /api/v1/products/{product}`
+- `DELETE /api/v1/products/{product}`
+
+## Testing & Quality Check
+
+Run semua test:
+```bash
+php artisan test
+```
+
+Generate OpenAPI otomatis dari source route:
+```bash
+php artisan openapi:generate
+```
+Output file:
+- `openapi/openapi.generated.json`
+
+Cek route:
+```bash
+php artisan route:list
+```
+
+Regenerate autoload:
+```bash
+composer dump-autoload
+```
