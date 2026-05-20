@@ -102,11 +102,38 @@ class AuthService implements AuthServiceInterface
      */
     protected function respondWithToken(string $token, mixed $user): array
     {
+        $refreshTtl = (int) config('jwt.refresh_ttl', 20160);
+        $refreshToken = $this->generateRefreshToken($user, $refreshTtl);
+
         return [
             'access_token' => $token,
-            'token_type' => 'bearer',
             'expires_in' => Auth::guard('api')->factory()->getTTL() * 60,
+            'refresh_token' => $refreshToken,
+            'refresh_expires_in' => $refreshTtl * 60,
             'user' => $user ? UserResource::make($user)->resolve() : null,
         ];
+    }
+
+    /**
+     * Generate a dedicated refresh token for client-side refresh flow.
+     */
+    protected function generateRefreshToken(mixed $user, int $refreshTtl): ?string
+    {
+        if (!$user) {
+            return null;
+        }
+
+        $guard = Auth::guard('api');
+        $defaultTtl = (int) config('jwt.ttl', 60);
+
+        $refreshToken = $guard
+            ->setTTL($refreshTtl)
+            ->claims(['token_use' => 'refresh'])
+            ->fromUser($user);
+
+        // Reset guard TTL so next access token generation keeps default lifetime.
+        $guard->setTTL($defaultTtl);
+
+        return $refreshToken;
     }
 }

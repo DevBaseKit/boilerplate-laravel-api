@@ -65,8 +65,9 @@ class ApiBoilerplateTest extends TestCase
                 'message',
                 'result' => [
                     'access_token',
-                    'token_type',
                     'expires_in',
+                    'refresh_token',
+                    'refresh_expires_in',
                     'user' => [
                         'id',
                         'name',
@@ -124,8 +125,9 @@ class ApiBoilerplateTest extends TestCase
                 'message',
                 'result' => [
                     'access_token',
-                    'token_type',
                     'expires_in',
+                    'refresh_token',
+                    'refresh_expires_in',
                 ],
             ]);
     }
