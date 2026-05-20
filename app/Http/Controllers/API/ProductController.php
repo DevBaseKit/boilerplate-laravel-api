@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\PaginationHelper;
 use App\Constants\ApiMessage;
 use App\Constants\ApiStatusCode;
 use App\Http\Controllers\Controller;
@@ -47,15 +48,7 @@ class ProductController extends Controller
     {
         $products = $this->productService->getAllProducts($request->validated());
         $data = ProductResource::collection($products)->resolve();
-
-        $payload = [
-            'total' => $products->total(),
-            'per_page' => $products->perPage(),
-            'current_page' => $products->currentPage(),
-            'last_page' => $products->lastPage(),
-            'first_page' => 1,
-            'data' => $data,
-        ];
+        $payload = PaginationHelper::format($products, $data);
 
         return $this->sendSuccess($payload, ApiMessage::SUCCESS);
     }

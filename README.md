@@ -162,6 +162,12 @@ Minimal method:
 - `app/Services/API/CategoryServiceInterface.php`
 - `app/Services/API/CategoryService.php`
 
+Command:
+```bash
+php artisan make:interface Services/API/CategoryServiceInterface
+php artisan make:class Services/API/CategoryService
+```
+
 Isi business logic, panggil repository di sini.
 
 6. Daftarkan binding di Service Provider
