@@ -4,13 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Constants\ApiMessage;
 use App\Constants\ApiStatusCode;
+use App\Contracts\Services\API\ProductServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\IndexProductRequest;
 use App\Http\Requests\API\StoreProductRequest;
 use App\Http\Requests\API\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use App\Services\API\ProductServiceInterface;
 use App\Services\AuditTrailService;
 use App\Support\PaginationFormatter;
 use App\Traits\ApiResponseTrait;

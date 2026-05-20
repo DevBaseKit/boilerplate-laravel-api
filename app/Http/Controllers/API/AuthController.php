@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Constants\ApiStatusCode;
+use App\Contracts\Services\API\AuthServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\LoginRequest;
 use App\Http\Requests\API\RegisterRequest;
-use App\Services\API\AuthServiceInterface;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
 

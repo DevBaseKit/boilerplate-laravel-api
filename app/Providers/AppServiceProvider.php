@@ -16,21 +16,21 @@ class AppServiceProvider extends ServiceProvider
     {
         // Repositories
         $this->app->bind(
-            \App\Repositories\API\AuthRepositoryInterface::class,
+            \App\Contracts\Repositories\API\AuthRepositoryInterface::class,
             \App\Repositories\API\AuthRepository::class
         );
         $this->app->bind(
-            \App\Repositories\API\ProductRepositoryInterface::class,
+            \App\Contracts\Repositories\API\ProductRepositoryInterface::class,
             \App\Repositories\API\ProductRepository::class
         );
 
         // Services
         $this->app->bind(
-            \App\Services\API\AuthServiceInterface::class,
+            \App\Contracts\Services\API\AuthServiceInterface::class,
             \App\Services\API\AuthService::class
         );
         $this->app->bind(
-            \App\Services\API\ProductServiceInterface::class,
+            \App\Contracts\Services\API\ProductServiceInterface::class,
             \App\Services\API\ProductService::class
         );
     }

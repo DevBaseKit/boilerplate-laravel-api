@@ -2,8 +2,9 @@
 
 namespace App\Services\API;
 
+use App\Contracts\Repositories\API\AuthRepositoryInterface;
+use App\Contracts\Services\API\AuthServiceInterface;
 use App\Http\Resources\UserResource;
-use App\Repositories\API\AuthRepositoryInterface;
 use App\Services\AuditTrailService;
 use Illuminate\Support\Facades\Auth;
 

@@ -2,7 +2,8 @@
 
 namespace App\Services\API;
 
-use App\Repositories\API\ProductRepositoryInterface;
+use App\Contracts\Repositories\API\ProductRepositoryInterface;
+use App\Contracts\Services\API\ProductServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 

@@ -55,6 +55,9 @@ php artisan serve
 
 ```text
 app/
+├── Contracts/
+│   ├── Repositories/API/       # Interface repository (abstraction)
+│   └── Services/API/           # Interface service (abstraction)
 ├── Constants/                  # Konstanta message & status code API
 ├── Http/
 │   ├── Controllers/API/        # Controller endpoint API
@@ -63,8 +66,8 @@ app/
 │   └── Resources/              # Transformer output response API
 ├── Models/                     # Eloquent models
 ├── Policies/                   # Authorization rule (ownership/role)
-├── Repositories/API/           # Data access layer (query model)
-├── Services/API/               # Business logic API
+├── Repositories/API/           # Implementasi data access layer
+├── Services/API/               # Implementasi business logic API
 └── Traits/ApiResponseTrait.php # Format response sukses/error standar
 
 database/
@@ -86,6 +89,7 @@ openapi/
 |---|---|
 | Controller | Terima request, panggil service, kirim response |
 | Request | Validasi input per endpoint |
+| Contract | Menentukan interface service/repository |
 | Service | Menjalankan business rules/use-case |
 | Repository | Menangani query & akses data |
 | Resource | Menstandarkan format output API |
@@ -148,7 +152,7 @@ php artisan make:resource CategoryResource
 ```
 
 4. Buat Repository Interface + Repository
-- `app/Repositories/API/CategoryRepositoryInterface.php`
+- `app/Contracts/Repositories/API/CategoryRepositoryInterface.php`
 - `app/Repositories/API/CategoryRepository.php`
 
 Minimal method:
@@ -159,12 +163,12 @@ Minimal method:
 - `deleteModel(Category $category)`
 
 5. Buat Service Interface + Service
-- `app/Services/API/CategoryServiceInterface.php`
+- `app/Contracts/Services/API/CategoryServiceInterface.php`
 - `app/Services/API/CategoryService.php`
 
 Command:
 ```bash
-php artisan make:interface Services/API/CategoryServiceInterface
+php artisan make:interface Contracts/Services/API/CategoryServiceInterface
 php artisan make:class Services/API/CategoryService
 ```
 
@@ -176,6 +180,10 @@ Isi business logic, panggil repository di sini.
 Tambahkan:
 - `CategoryRepositoryInterface -> CategoryRepository`
 - `CategoryServiceInterface -> CategoryService`
+
+Catatan:
+- Import interface dari namespace `App\Contracts\...`
+- Import implementasi dari `App\Services\...` / `App\Repositories\...`
 
 7. Buat Controller API
 ```bash

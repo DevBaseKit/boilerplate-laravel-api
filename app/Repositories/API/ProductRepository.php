@@ -2,6 +2,7 @@
 
 namespace App\Repositories\API;
 
+use App\Contracts\Repositories\API\ProductRepositoryInterface;
 use App\Models\Product;
 use App\Repositories\Concerns\AppliesQueryFilters;
 use Illuminate\Pagination\LengthAwarePaginator;
