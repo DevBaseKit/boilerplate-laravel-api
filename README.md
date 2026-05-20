@@ -155,6 +155,12 @@ php artisan make:resource CategoryResource
 - `app/Contracts/Repositories/API/CategoryRepositoryInterface.php`
 - `app/Repositories/API/CategoryRepository.php`
 
+Command:
+```bash
+php artisan make:interface Contracts/Repositories/API/CategoryRepositoryInterface
+php artisan make:class Repositories/API/CategoryRepository
+```
+
 Minimal method:
 - `paginate(int $perPage = 10)`
 - `findOrFail(mixed $id)`
